@@ -38,7 +38,7 @@ Default values for the are set under `jobs.quality_gate.env`. As long as your de
 ```
 
 ### So my tests pass once, what then?
-Once your entire test suite has passed for a single browser (thus proving your code works), your suite is run again, once for every session configured in `browser_coverage.strategy.matrix`.  See (Using a build matrix)[https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix] for details on how that works.  These tests also run in parallel, one for every available concurrency.
+Once your entire test suite has passed for a single browser (thus proving your code works), your suite is run again, once for every session configured in `browser_coverage.strategy.matrix`.  See [Using a build matrix](https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix) for details on how that works.  These tests also run in parallel, one for every available concurrency.
 
 This proves that the individual browsers work with your code.  It's a much slower process, but the rapid feeback from the first phase lets you get back to work and let browser tests chug along in the background
 
@@ -49,7 +49,7 @@ This setup caches the installed gems, making it quicker to set up your code on s
 By relying on the parallel_tests gem's time tracking feature, tests are divided up during the `quality_gate` step to make all tests finish as rapidly as possible.
 
 ### Status Badges.
-Easily done!  (See here)[https://docs.github.com/en/free-pro-team@latest/actions/managing-workflow-runs/adding-a-workflow-status-badge]
+Easily done!  [See here](https://docs.github.com/en/free-pro-team@latest/actions/managing-workflow-runs/adding-a-workflow-status-badge)
 
 ### Manual Excution for specific platforms
 Because this workflow has a `workflow_dispatch` trigger, you're able to manually trigger a run from the Actions tab.  When doing so, you can pick the platform you want to test against, as well as the amount of concurrency to test with.
