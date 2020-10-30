@@ -48,6 +48,7 @@ jobs:
       browserVersion: ${{ github.event.inputs.browserVersion || 'latest' }}
       platformName: ${{ github.event.inputs.platformName || 'MacOS 10.14' }}
       concurrency: ${{ github.event.inputs.concurrency || 5 }}
+      build: ${{ github.event_name}}_${{ github.sha }}
 
     steps:
     - uses: actions/checkout@v2
@@ -127,5 +128,6 @@ jobs:
         env:
           browserName: ${{ matrix.browserName }} 
           browserVersion: ${{ matrix.browserVersion }} 
-          platformName: ${{ matrix.platformName }} 
+          platformName: ${{ matrix.platformName }}
+          build: ${{ github.event_name}}_${{ github.sha }}_${{ matrix.browserName}}_${{ matrix.browserVersion }}_${{ matrix.platformName}} 
         run: bundle exec rspec
