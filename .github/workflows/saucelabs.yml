@@ -71,10 +71,10 @@ jobs:
           bundle install --jobs 4 --retry 3
 
     - name: Cache test timings
-        uses: actions/cache@v2
-        with:
-          key: parallel_test_times_${{ env.browserName }}_${{ env.browserVersion }}_$${{ env.platformName }}
-          path: tmp/parallel_runtime_spec.log
+      uses: actions/cache@v2
+      with:
+        key: parallel_test_times_${{ env.browserName }}_${{ env.browserVersion }}_$${{ env.platformName }}
+        path: tmp/parallel_runtime_spec.log
 
     - name: Run tests
       run: bundle exec parallel_rspec -n $concurrency spec/
