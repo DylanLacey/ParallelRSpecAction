@@ -50,6 +50,11 @@ jobs:
       concurrency: ${{ github.event.inputs.concurrency || 5 }}
       build: ${{ github.event_name}}_${{ github.sha }}
 
+    services:
+      image: saucelabs/sauce-connect
+      ports: 
+        - 3000:3000
+
     steps:
     - uses: actions/checkout@v2
       
