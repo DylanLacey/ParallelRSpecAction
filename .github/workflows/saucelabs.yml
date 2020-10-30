@@ -73,14 +73,13 @@ jobs:
       max-parallel: 2
       fail-fast: true
       matrix:
-        browserName: [Firefox, Safari]
+        browserName: [Firefox, Chrome]
         browserVersion: [latest]
         platformName: [Windows 10, Windows 7, MacOS 10.14]
         exclude:
           - browserName: Chrome
+            browserVersion: latest
             platformName: Windows 10
-          - browserName: Safari
-            platformName: Windows 7
         include: 
           - browserName: Safari
             platformName: MacOS 10.14
