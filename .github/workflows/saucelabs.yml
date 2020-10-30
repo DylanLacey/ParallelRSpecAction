@@ -50,8 +50,16 @@ jobs:
       uses: ruby/setup-ruby@v1.47.0
       with:
         ruby-version: 2.7.1
+
+    - name: Cache Gems
+      uses: actions/cache@v2
+      with:
+        path: vendor/bundle
+        key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-gems-
+
     - name: Install dependencies
-      
       run: bundle install
     - name: Run tests
       env:
@@ -90,6 +98,14 @@ jobs:
         uses: ruby/setup-ruby@v1.47.0
         with:
           ruby-version: 2.7.1
+
+      - name: Cache Gems
+        uses: actions/cache@v2
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
 
       - name: Install dependencies
         run: bundle install
