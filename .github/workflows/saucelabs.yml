@@ -1,0 +1,93 @@
+# This workflow relies on https://github.com/ruby/setup-ruby Github, as well as 3rd party gems.
+#
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+#
+# Sauce Labs provides no guarantees, warranties, indemnities of any kind regarding this action.
+#
+# This workflow will download a prebuilt Ruby version, install dependencies and run tests with rspec and parallel_tests
+
+name: Sauce Labs Tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      concurrency: 
+        description: '# Concurrent Sauce Sessions'
+        required: false
+        default: 4
+      browserName:
+        description: 'Target Browser Name'
+        required: true
+        default: 'Chrome'
+      browserVersion:
+        description: 'Target Version'
+        required: true
+        default: 'latest'
+      platformName:
+        description: 'Target OS'
+        required: true
+        default: 'MacOS 10.14'
+
+env:
+  SAUCE_USERNAME: ${{ secrets.SauceUsername }}
+  SAUCE_ACCESS_KEY: ${{ secrets.SauceAccessKey }}     
+
+jobs:
+  quality_gate:
+    name: Sauce Labs Quality Gate
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1.47.0
+      with:
+        ruby-version: 2.7.1
+    - name: Install dependencies
+      
+      run: bundle install
+    - name: Run tests
+      env:
+        browserName: ${{ github.event.inputs.browserName || 'Chrome' }}
+        browserVersion: ${{ github.event.inputs.browserVersion || 'latest' }}
+        platformName: ${{ github.event.inputs.platformName || 'MacOS 10.14' }}
+        concurrency: ${{ github.event.inputs.concurrency || 5 }}
+      run: parallel_rspec -n $CONCURRENCY specs/
+
+
+  browser_coverage:
+    name: Ensure tests run in all browsers
+    runs-on: ubuntu-latest
+    needs: quality_gate
+    # Only run browser coverage tests if this workflow was not manually triggered
+    if: ${{ github.event_name != workflow_dispatch }}
+    strategy:
+      max-parallel: 2
+      fail-fast: true
+      matrix:
+        browserName: [Firefox, Safari]
+        browserVersion: [latest]
+        platformName: [Windows 10, Windows 7, MacOS 10.14]
+        exclude:
+          - browserName: Chrome
+            platformName: Windows 10
+          - browserName: Safari
+            platformName: Windows 7
+        include: 
+          - browserName: Safari
+            platformName: MacOS 10.14
+    steps:
+    - 
+      name: run tests
+      env:
+        browserName: ${{ matrix.browserName }} 
+        browserVersion: ${{ matrix.browserVersion }} 
+        platformName: ${{ matrix.platformName }} 
+      run: rspec
