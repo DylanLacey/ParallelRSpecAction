@@ -63,7 +63,7 @@ jobs:
 
 
   browser_coverage:
-    name: Ensure tests run in all browsers
+    name: SL Test
     runs-on: ubuntu-latest
     needs: quality_gate
     # Only run browser coverage tests if this workflow was not manually triggered
@@ -84,20 +84,20 @@ jobs:
         include: 
           - browserName: Safari
             platformName: MacOS 10.14
-    steps:
-    - uses: actions/checkout@v2
-      
-    - name: Set up Ruby
-      uses: ruby/setup-ruby@v1.47.0
-      with:
-        ruby-version: 2.7.1
-    - name: Install dependencies
-      
-      run: bundle install
+    steps:  
+      - uses: actions/checkout@v2
+        
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1.47.0
+        with:
+          ruby-version: 2.7.1
 
-    - name: run tests
-      env:
-        browserName: ${{ matrix.browserName }} 
-        browserVersion: ${{ matrix.browserVersion }} 
-        platformName: ${{ matrix.platformName }} 
-      run: rspec
+      - name: Install dependencies
+        run: bundle install
+
+      - name: run tests
+        env:
+          browserName: ${{ matrix.browserName }} 
+          browserVersion: ${{ matrix.browserVersion }} 
+          platformName: ${{ matrix.platformName }} 
+        run: rspec
