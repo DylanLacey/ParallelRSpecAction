@@ -69,7 +69,7 @@ jobs:
         browserVersion: ${{ github.event.inputs.browserVersion || 'latest' }}
         platformName: ${{ github.event.inputs.platformName || 'MacOS 10.14' }}
         concurrency: ${{ github.event.inputs.concurrency || 5 }}
-      run: parallel_rspec -n $concurrency spec/
+      run: bundle exec parallel_rspec -n $concurrency spec/
 
 
   browser_coverage:
@@ -119,4 +119,4 @@ jobs:
           browserName: ${{ matrix.browserName }} 
           browserVersion: ${{ matrix.browserVersion }} 
           platformName: ${{ matrix.platformName }} 
-        run: rspec
+        run: bundle exec rspec
