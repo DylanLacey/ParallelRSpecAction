@@ -97,9 +97,16 @@ RSpec.configure do |config|
   # as the one that triggered the failure.
   Kernel.srand config.seed
 =end
+  config.before :all do
+    puts "Thread #{ENV['TEST_ENV_NUMBER'].to_i} will use:"
+    ["browserName", "browserVersion", "platformVersion"].each do |cap|
+      puts (ENV[cap] || "default").rjust 20
+    end
+    puts ""
+  end
 
   config.around :each do |example|
-    STDOUT.puts "Running #{example.full_description} in parralel thread #{ENV['TEST_ENV_NUMBER'].to_i}"
+    puts "Running #{example.full_description} in parallel thread #{ENV['TEST_ENV_NUMBER'].to_i}"
     example.run
   end
 end
