@@ -99,7 +99,7 @@ RSpec.configure do |config|
 =end
   config.before :all do
     puts "Thread #{ENV['TEST_ENV_NUMBER'].to_i} will use:"
-    ["browserName", "browserVersion", "platformName"].each do |cap|
+    ["browserName", "browserVersion", "platformName", "build"].each do |cap|
       puts (ENV[cap] || "default").rjust 20
     end
     puts ""
