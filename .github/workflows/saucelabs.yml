@@ -67,7 +67,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: quality_gate
     # Only run browser coverage tests if this workflow was not manually triggered
-    if: ${{ github.event_name != workflow_dispatch }}
+    if: ${{ github.event_name != 'workflow_dispatch' }}
     strategy:
       max-parallel: 2
       fail-fast: true
