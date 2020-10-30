@@ -43,6 +43,12 @@ jobs:
     name: Sauce Labs Quality Gate
     runs-on: ubuntu-latest
 
+    env:
+      browserName: ${{ github.event.inputs.browserName || 'Chrome' }}
+      browserVersion: ${{ github.event.inputs.browserVersion || 'latest' }}
+      platformName: ${{ github.event.inputs.platformName || 'MacOS 10.14' }}
+      concurrency: ${{ github.event.inputs.concurrency || 5 }}
+
     steps:
     - uses: actions/checkout@v2
       
@@ -63,13 +69,16 @@ jobs:
       run: |
           bundle config path vendor/bundle
           bundle install --jobs 4 --retry 3
+
+    - name: Cache test timings
+        uses: actions/cache@v2
+        with:
+          key: parallel_test_times_${{ env.browserName }}_${{ env.browserVersion }}_$${{ env.platformName }}
+          path: tmp/parallel_runtime_spec.log
+
     - name: Run tests
-      env:
-        browserName: ${{ github.event.inputs.browserName || 'Chrome' }}
-        browserVersion: ${{ github.event.inputs.browserVersion || 'latest' }}
-        platformName: ${{ github.event.inputs.platformName || 'MacOS 10.14' }}
-        concurrency: ${{ github.event.inputs.concurrency || 5 }}
       run: bundle exec parallel_rspec -n $concurrency spec/
+
 
 
   browser_coverage:
