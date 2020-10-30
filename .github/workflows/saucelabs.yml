@@ -68,6 +68,7 @@ jobs:
     needs: quality_gate
     # Only run browser coverage tests if this workflow was not manually triggered
     if: ${{ github.event_name != 'workflow_dispatch' }}
+
     strategy:
       max-parallel: 2
       fail-fast: true
@@ -84,8 +85,17 @@ jobs:
           - browserName: Safari
             platformName: MacOS 10.14
     steps:
-    - 
-      name: run tests
+    - uses: actions/checkout@v2
+      
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1.47.0
+      with:
+        ruby-version: 2.7.1
+    - name: Install dependencies
+      
+      run: bundle install
+
+    - name: run tests
       env:
         browserName: ${{ matrix.browserName }} 
         browserVersion: ${{ matrix.browserVersion }} 
