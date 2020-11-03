@@ -50,12 +50,6 @@ jobs:
       concurrency: ${{ github.event.inputs.concurrency || 5 }}
       build: ${{ github.event_name}}_${{ github.sha }}
 
-    services:
-      sc:
-        image: saucelabs/sauce-connect
-        ports: 
-          - 3000:3000
-
     steps:
     - uses: actions/checkout@v2
       
@@ -82,6 +76,13 @@ jobs:
       with:
         key: parallel_test_times_${{ env.browserName }}_${{ env.browserVersion }}_$${{ env.platformName }}
         path: tmp/parallel_runtime_spec.log
+
+    - name: Start SC
+      uses: saucelabs/sauce-connect-action@master
+      with:
+        username: ${{ secrets.SAUCE_USERNAME }}
+        accessKey: ${{ secrets.SAUCE_ACCESS_KEY }}
+        tunnelIdentifier: github-action-tunnel
 
     - name: Run tests
       run: bundle exec parallel_rspec -n $concurrency spec/
