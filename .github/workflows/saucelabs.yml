@@ -51,9 +51,10 @@ jobs:
       build: ${{ github.event_name}}_${{ github.sha }}
 
     services:
-      image: saucelabs/sauce-connect
-      ports: 
-        - 3000:3000
+      sc:
+        image: saucelabs/sauce-connect
+        ports: 
+          - 3000:3000
 
     steps:
     - uses: actions/checkout@v2
